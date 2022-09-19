@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -5,8 +6,7 @@ public class Main {
 
         Vigenere vig = new Vigenere();
 
-
-        String lol = String.valueOf(vig.encrypt("I LOOVE PEANUTS", "BANANA"));
-        System.out.println(lol);
+        String str = new String(vig.encrypt("THE BOY HAS THE TOY", "VIG"));
+        System.out.println(str);
     }
 }
