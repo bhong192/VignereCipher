@@ -9,6 +9,8 @@ public class Vigenere {
     public Vigenere(){
     }
 
+    public String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
     public char[] encrypt(String plaintext, String key){
 
         // Step 1: Convert plaintext and key to char[]
@@ -30,7 +32,7 @@ public class Vigenere {
         }
 
         // Step 3: Map characters to corresponding letters in alphabet (A -> 0, etc)
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            //key
         int[] mappedMessageNumArray = new int[mappedMessage.length];
         char letter = ' ';
         for(int i = 0; i < mappedMessage.length; i++){
@@ -66,7 +68,74 @@ public class Vigenere {
     }
 
     public char[] decrypt(String cipherText, String key){
-        char[] result = new char[cipherText.length()];
-        return result;
+
+        //Step 1: convert ciphertext to int[]
+        int[] ciphertextNumArray = new int[cipherText.length()];
+        for(int i = 0; i < ciphertextNumArray.length; i++){
+            ciphertextNumArray[i] = alphabet.indexOf(cipherText.charAt(i));
+
+            // to get rid of -1 mapped from spaces in ciphertext
+//            if(ciphertextNumArray[i] == -1){
+//                ciphertextNumArray[i] = 0;
+//            }
+        }
+        //repeat for key
+
+        //map characters in the key to the ciphertext again
+        char[] ciphertextCharArray = cipherText.toCharArray();
+        char[] keyChar = key.toCharArray();
+        for(int i = 0, j = 0; i < cipherText.length(); i++){
+            if(ciphertextCharArray[i] != ' '){
+                ciphertextCharArray[i] = keyChar[j];
+                if(j == keyChar.length-1){
+                    j = 0;
+                }
+                else{
+                    j++;
+                }
+            }
+        }
+        // convert message mapped to key chars to int[]
+        int[] keyNumArray = new int[cipherText.length()];
+        for(int i = 0; i < ciphertextCharArray.length; i++){
+            keyNumArray[i] = alphabet.indexOf(ciphertextCharArray[i]);
+//            if(keyNumArray[i]==-1){
+//                keyNumArray[i] = 0;
+//            }
+        }
+
+        //System.out.println(Arrays.toString(keyNumArray));
+
+        //subtract values from int[] of ciphertext and mapped message
+        int[] decryptedIntArray = new int[cipherText.length()];
+        for(int i = 0; i < cipherText.length(); i++){
+            if(ciphertextNumArray[i] != -1 && keyNumArray[i] != -1){
+                decryptedIntArray[i] = Math.floorMod((ciphertextNumArray[i] - keyNumArray[i]), 26);
+                //decryptedIntArray[i] = (ciphertextNumArray[i] - keyNumArray[i]) % 26;
+                // zeroes are spaces
+            }
+        }
+
+        //System.out.println("decrypted int array: " + Arrays.toString(decryptedIntArray));
+
+        // create decrypted message array
+        // keep track of indexes of where spaces are
+        ArrayList<Integer> spaceLocations = new ArrayList<>();
+        for(int i = 0; i < cipherText.length(); i++){
+            if(ciphertextCharArray[i] == ' '){
+                spaceLocations.add(i);
+            }
+        }
+        char[] decryptedArray = new char[cipherText.length()];
+        for(int i = 0; i < cipherText.length(); i++){
+            if(spaceLocations.contains(i)){
+                decryptedArray[i] =  ' ';
+            }
+            else{
+                decryptedArray[i] = alphabet.charAt(decryptedIntArray[i]);
+            }
+        }
+
+        return decryptedArray;
     }
 }
