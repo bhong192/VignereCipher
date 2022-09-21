@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Vigenere {
 
@@ -34,7 +32,7 @@ public class Vigenere {
         // Step 3: Map characters to corresponding letters in alphabet (A -> 0, etc)
             //key
         int[] mappedMessageNumArray = new int[mappedMessage.length];
-        char letter = ' ';
+
         for(int i = 0; i < mappedMessage.length; i++){
             mappedMessageNumArray[i] = alphabet.indexOf(mappedMessage[i]);
         }
@@ -54,14 +52,27 @@ public class Vigenere {
         }
 
         //Step 5: Create encrypted message
+        ArrayList<Integer> spaceLocations = new ArrayList<>();
+        for(int i = 0; i < message.length; i++){
+            if(message[i] == ' '){
+                spaceLocations.add(i);
+            }
+        }
         char[] ciphertextArray = new char[message.length];
         for(int i = 0; i < message.length; i++){
-           if(cipherNumArray[i] == 0){
-               ciphertextArray[i] = ' ';
-           }
-           else{
-               ciphertextArray[i] = alphabet.charAt(cipherNumArray[i]);
-           }
+//           if(cipherNumArray[i] == 0){
+//               ciphertextArray[i] = ' ';
+//           }
+//           else{
+//               ciphertextArray[i] = alphabet.charAt(cipherNumArray[i]);
+//           }
+
+            if(spaceLocations.contains(i)){
+                ciphertextArray[i] =  ' ';
+            }
+            else{
+                ciphertextArray[i] = alphabet.charAt(cipherNumArray[i]);
+            }
         }
 
         return ciphertextArray;
